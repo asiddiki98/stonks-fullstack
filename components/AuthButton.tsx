@@ -17,9 +17,11 @@ export default async function AuthButton() {
     return redirect("/login");
   };
 
+  const profile = await supabase.from("profiles").select().single();
+
   return user ? (
-    <div className="flex items-center gap-4">
-      Hey, {user.email}!
+    <div className="flex items-center gap-4 ">
+      <p>Profile</p>
       <form action={signOut}>
         <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
           Logout
@@ -29,7 +31,7 @@ export default async function AuthButton() {
   ) : (
     <Link
       href="/login"
-      className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+      className="py-2 px-4 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover w-fit"
     >
       Login
     </Link>
