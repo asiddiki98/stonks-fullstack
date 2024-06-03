@@ -13,15 +13,43 @@ export default async function AuthButton() {
     "use server";
 
     const supabase = createClient();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // update profile.is_online to false
+    const { error } = await supabase
+      .from("profiles")
+      .update({ is_online: false })
+      .eq("id", user!.id);
+
+    if (error) {
+      console.error("Error updating profile:", error);
+    }
     await supabase.auth.signOut();
     return redirect("/login");
+  };
+
+  const openProfile = async () => {
+    "use server";
+
+    const supabase = createClient();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    return redirect(`/profile/${user!.id}`);
   };
 
   const profile = await supabase.from("profiles").select().single();
 
   return user ? (
     <div className="flex items-center gap-4 ">
-      <p>Profile</p>
+      <Link href={`/profile/${user.id}`} className="">
+        Profile
+      </Link>
       <form action={signOut}>
         <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
           Logout

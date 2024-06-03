@@ -17,7 +17,7 @@ export default function ProviderSignInButton({
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${origin}/api/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
 

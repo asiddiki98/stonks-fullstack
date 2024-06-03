@@ -2,14 +2,23 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
-import ProviderSignInButton from "./provider-signin-button";
+import { SubmitButton } from "@/components/SubmitButton";
+import ProviderSignInButton from "@/components/Auth/ProviderSigninButton";
 
-export default function Login({
+export default async function Login({
   searchParams,
 }: {
   searchParams: { message: string };
 }) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    return redirect("/");
+  }
   const signIn = async (formData: FormData) => {
     "use server";
 
@@ -27,7 +36,21 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/protected");
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // update profile.is_online to true
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({ is_online: true })
+      .eq("id", user!.id);
+
+    if (profileError) {
+      console.error("Error updating profile:", profileError);
+    }
+
+    return redirect("/");
   };
 
   const signUp = async (formData: FormData) => {
@@ -48,6 +71,7 @@ export default function Login({
     });
 
     if (error) {
+      console.error("Error signing up:", error);
       return redirect("/login?message=Could not authenticate user");
     }
 
@@ -63,7 +87,7 @@ export default function Login({
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
           name="email"
           placeholder="you@example.com"
-          // required
+          required
         />
         <label className="text-md" htmlFor="password">
           Password
@@ -73,7 +97,7 @@ export default function Login({
           type="password"
           name="password"
           placeholder="••••••••"
-          // required
+          required
         />
         <SubmitButton
           formAction={signIn}
@@ -84,7 +108,7 @@ export default function Login({
         </SubmitButton>
         <SubmitButton
           formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2 bg-btn-background colored hover:bg-btn-background-hover"
           pendingText="Signing Up..."
         >
           Sign Up

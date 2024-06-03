@@ -22,29 +22,28 @@ export async function GET(request: Request) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", user.id);
+      .eq("id", user.id)
+      .single();
 
-    // if the user does not have a profile, create one
-    if (!profile || profile.length === 0) {
-      // Create or update user profile
-      const { error: insertError } = await supabase.from("profiles").insert({
-        id: user.id, // Use the user's auth UID as the primary key
-        email: user.email,
-        username: null,
-        notification_preferences: {}, // Default notification preferences
-        is_streaming: false, // Default streaming status
-        is_online: true, // Default online status
-      });
+    if (profile.username === null) {
+      return NextResponse.redirect(`${origin}/complete-signup`);
+    } else {
+      // update profile.is_online to true if they are loggin in with google
 
-      if (insertError) {
-        console.error("Error upserting user profile:", insertError);
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ is_online: true })
+        .eq("id", user.id);
+
+      if (profileError) {
+        console.error("Error updating profile:", profileError);
         return NextResponse.redirect(
-          `${origin}/login?message=Could not create user profile`
+          `${origin}/login?message=Could not update user profile`
         );
       }
     }
   }
 
   // URL to redirect to after sign-up process completes
-  return NextResponse.redirect(`${origin}/protected`);
+  return NextResponse.redirect(`${origin}/`);
 }
