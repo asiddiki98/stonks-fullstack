@@ -1,49 +1,20 @@
 "use client";
 
-import useWebSocket from "@/lib/hooks/useWebsocket";
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { createClient } from "@/utils/supabase/client";
+import { useSelector } from "react-redux";
+import useWebSocket from "@/lib/hooks/useWebsocket";
 
 export default function Notifications() {
-  const [messages, setMessages] = useState<any[]>([]);
-  const [user, setUser] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const ws = useWebSocket();
 
-  const supabase = createClient();
+  const messages = useSelector(
+    (state: any) => state.notification.notifications
+  );
 
   // Function to handle incoming WebSocket messages
-  const handleMessage = useCallback(
-    (event: MessageEvent) => {
-      const message: any = JSON.parse(event.data);
-
-      if (
-        message.type === "STREAM_START" &&
-        message.followerIds.some((id: string) => id === user?.id)
-      ) {
-        console.log("Stream started:", message);
-        setMessages((prevMessages) => [...prevMessages, message]);
-      }
-    },
-    [user?.id]
-  );
-
-  const ws = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?userId=${user?.id}`,
-    handleMessage
-  );
-  // Fetch user data
-  useEffect(() => {
-    const fetchUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      setUser(user || { id: "public" });
-    };
-
-    fetchUser();
-  }, []);
 
   return (
     <div className=" relative">
@@ -58,7 +29,7 @@ export default function Notifications() {
 
       {open && (
         <ul className=" absolute top-12 right-0 min-w-[200px]  border rounded">
-          {messages.map((msg, index) => (
+          {messages.map((msg: any, index: any) => (
             <li className="py-2 border-b  px-4" key={index}>
               <small>{msg.username} started streaming</small>
             </li>

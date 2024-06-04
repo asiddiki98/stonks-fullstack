@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Channel from "@/components/Channel";
-import ReconnectingWebSocket from "reconnecting-websocket";
 
 export default function Index() {
   const supabase = createClient();

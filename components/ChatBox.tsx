@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import useWebSocket from "@/lib/hooks/useWebsocket";
 import { createClient } from "@/utils/supabase/client";
 import { Icon } from "@iconify/react";
+import { useSelector } from "react-redux";
 
 export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
   const [user, setUser] = useState<any>(null);
   const supabase = createClient();
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<any[]>([]);
+  const messages = useSelector((state: any) => state.chat.messages);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,20 +27,6 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
 
     fetchUser();
   }, []);
-
-  const handleMessage = useCallback((event: MessageEvent) => {
-    const message = JSON.parse(event.data);
-    if (message.type === "CHAT_MESSAGE") {
-      if (message.streamerId === streamerProfile.id) {
-        console.log("message", message);
-        setMessages((prev) => [...prev, message]);
-      }
-    }
-  }, []);
-  const ws = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?userId=${user?.id}`,
-    handleMessage
-  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +59,7 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
       </h1>
       <div className="relative overflow-y-scroll">
         <ul className="flex flex-col space-y-2 p-4 overflow-y-scroll">
-          {messages.map((msg, index) => (
+          {messages.map((msg: any, index: any) => (
             <li key={index}>
               <strong>{msg.username}:</strong> {msg.message}
             </li>
