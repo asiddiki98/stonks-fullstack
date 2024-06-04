@@ -16,7 +16,6 @@ export default function useWebSocket() {
 
     socket.onopen = () => {
       console.log("Connected to WebSocket");
-      // fetchUser();
     };
 
     socket.onmessage = (event) => {
@@ -35,11 +34,6 @@ export default function useWebSocket() {
       socket.close();
     };
   }, []);
-
-  // const fetchUser = async () => {
-  //   const { data } = await supabase.auth.getUser();
-  //   setUser(data.user || { id: "public" });
-  // };
 
   const handleIncomingMessage = async (message: any) => {
     const { data } = await supabase.auth.getUser();

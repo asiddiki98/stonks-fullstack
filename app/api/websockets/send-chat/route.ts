@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 const webSocketUrl: any = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
 
-export async function POST(req: Request) {
-  const { userId, username, message, streamerId } = await req.json();
+export async function GET(req: Request) {
+  // const { userId, username, message, streamerId } = await req.json();
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get("userId");
+  const username = searchParams.get("username");
+  const message = searchParams.get("message");
+  const streamerId = searchParams.get("streamerId");
+
   console.log("userId", userId);
 
   if (!userId || !username || !message || !streamerId) {

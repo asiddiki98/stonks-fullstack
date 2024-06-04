@@ -41,13 +41,9 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
         streamerId: streamerProfile.id,
         message: input,
       };
-      fetch("/api/websockets/send-chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      fetch(
+        `/api/websockets/send-chat?userId=${body.userId}&username=${body.username}&streamerId=${body.streamerId}&message=${body.message}`
+      );
     }
   };
 
