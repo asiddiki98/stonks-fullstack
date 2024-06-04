@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Notifications from "@/components/Notifications";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -50,6 +51,7 @@ export default async function AuthButton() {
       <Link href={`/profile/${user.id}`} className="">
         Profile
       </Link>
+      <Notifications />
       <form action={signOut}>
         <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
           Logout

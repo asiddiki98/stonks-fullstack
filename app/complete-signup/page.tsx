@@ -67,6 +67,7 @@ export default async function CompleteSignup({
             type="checkbox"
             name="emailNotification"
             id="emailNotification"
+            defaultChecked
           />
           <label className="text-md" htmlFor="emailNotification">
             Email Notifications
@@ -77,6 +78,7 @@ export default async function CompleteSignup({
             type="checkbox"
             name="pushNotification"
             id="pushNotification"
+            defaultChecked
           />
           <label className="text-md" htmlFor="pushNotification">
             Push Notifications

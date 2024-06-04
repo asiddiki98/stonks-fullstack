@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import FollowBtn from "@/components/FollowBtn";
+import useWebSocket from "@/lib/hooks/useWebsocket";
 
 type Profile = {
   id: string;
@@ -25,6 +26,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const { profileId } = params;
+
+  // const ws = useWebSocket(`ws://localhost:8080?userId=${user?.id}`);
 
   const router = useRouter();
 
@@ -102,6 +105,10 @@ export default function Profile() {
     } else {
       setIsStreaming(true);
     }
+
+    fetch(
+      `/api/websockets/notify-followers?id=${user.id}&username=${user?.username}`
+    );
   };
 
   const endStream = async (event: React.FormEvent) => {
