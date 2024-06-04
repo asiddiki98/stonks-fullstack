@@ -22,7 +22,7 @@ export default function useWebSocket(url: any, onMessage: any) {
     return () => {
       socket.close();
     };
-  }, [url]);
+  }, [url, onMessage]);
 
   return ws;
 }

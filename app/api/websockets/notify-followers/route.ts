@@ -60,12 +60,12 @@ export async function GET(request: Request) {
 
       // send email to the offline followers
       console.log("offlineFollowers", offlineFollowers);
-      if (offlineFollowers.length > 0) {
-        for (const follower of offlineFollowers) {
-          const message = `Hello ${follower.username}, ${username} has started streaming. Check it out!`;
-          await sendEmail(follower.email, "New Stream Alert", message);
-        }
-      }
+      // if (offlineFollowers.length > 0) {
+      //   for (const follower of offlineFollowers) {
+      //     const message = `Hello ${follower.username}, ${username} has started streaming. Check it out!`;
+      //     await sendEmail(follower.email, "New Stream Alert", message);
+      //   }
+      // }
     }
   }
   // notify followers

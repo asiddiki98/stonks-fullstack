@@ -13,37 +13,37 @@ export default function Notifications() {
   const supabase = createClient();
 
   // Function to handle incoming WebSocket messages
-  // const handleMessage = useCallback(
-  //   (event: MessageEvent) => {
-  //     const message: any = JSON.parse(event.data);
+  const handleMessage = useCallback(
+    (event: MessageEvent) => {
+      const message: any = JSON.parse(event.data);
 
-  //     if (
-  //       message.type === "STREAM_START" &&
-  //       message.followerIds.some((id: string) => id === user?.id)
-  //     ) {
-  //       console.log("Stream started:", message);
-  //       setMessages((prevMessages) => [...prevMessages, message]);
-  //     }
-  //   },
-  //   [user?.id]
-  // );
+      if (
+        message.type === "STREAM_START" &&
+        message.followerIds.some((id: string) => id === user?.id)
+      ) {
+        console.log("Stream started:", message);
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
+    },
+    [user?.id]
+  );
 
-  // const ws = useWebSocket(
-  //   `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?userId=${user?.id}`,
-  //   handleMessage
-  // );
-  // // Fetch user data
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser();
+  const ws = useWebSocket(
+    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?userId=${user?.id}`,
+    handleMessage
+  );
+  // Fetch user data
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-  //     setUser(user || { id: "public" });
-  //   };
+      setUser(user || { id: "public" });
+    };
 
-  //   fetchUser();
-  // }, []);
+    fetchUser();
+  }, []);
 
   return (
     <div className=" relative">

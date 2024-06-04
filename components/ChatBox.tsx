@@ -55,7 +55,6 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
         streamerId: streamerProfile.id,
         message: input,
       };
-      console.log("body", body);
       await fetch("/api/websockets/send-chat", {
         method: "POST",
         headers: {

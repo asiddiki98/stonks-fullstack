@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "node server.js & next dev",
+    "dev": "next dev",
     "build": "next build",
-    "start": "node server.js & next start"
+    "start": "next start"
   },
   "dependencies": {
     "@iconify/react": "^5.0.1",
