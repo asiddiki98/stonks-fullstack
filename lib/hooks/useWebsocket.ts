@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 
 export default function useWebSocket() {
   const [ws, setWs] = useState<any>(null);
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null);
   const dispatch = useDispatch();
   const supabase = createClient();
   const url = `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?identifier=hook`;
@@ -16,7 +16,7 @@ export default function useWebSocket() {
 
     socket.onopen = () => {
       console.log("Connected to WebSocket");
-      fetchUser();
+      // fetchUser();
     };
 
     socket.onmessage = (event) => {
@@ -36,13 +36,14 @@ export default function useWebSocket() {
     };
   }, []);
 
-  const fetchUser = async () => {
-    const { data } = await supabase.auth.getUser();
-    setUser(data.user || { id: "public" });
-  };
+  // const fetchUser = async () => {
+  //   const { data } = await supabase.auth.getUser();
+  //   setUser(data.user || { id: "public" });
+  // };
 
-  const handleIncomingMessage = (message: any) => {
-    console.log(user?.id);
+  const handleIncomingMessage = async (message: any) => {
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
     if (
       message.type === "STREAM_START" &&
       message.followerIds.includes(user?.id)
