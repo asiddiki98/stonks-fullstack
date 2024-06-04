@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Icon } from "@iconify/react";
 import { useSelector } from "react-redux";
+import { sendWebSocketMessage } from "@/lib/sendChat";
 
 export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
   const [user, setUser] = useState<any>(null);
@@ -35,15 +36,13 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
     }
     if (input.trim()) {
       setInput("");
-      const body = {
-        userId: user.id,
-        username: user.username,
-        streamerId: streamerProfile.id,
-        message: input,
-      };
-      fetch(
-        `/api/websockets/send-chat?userId=${body.userId}&username=${body.username}&streamerId=${body.streamerId}&message=${body.message}`
-      );
+      //   const body = {
+      //     userId: user.id,
+      //     username: user.username,
+      //     streamerId: streamerProfile.id,
+      //     message: input,
+      //   };
+      sendWebSocketMessage(user.id, user.username, input, streamerProfile.id);
     }
   };
 
