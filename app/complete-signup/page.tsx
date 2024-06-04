@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
@@ -9,14 +7,6 @@ export default async function CompleteSignup({
 }: {
   searchParams: { message: string };
 }) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  //   if (!user) {
-  //     return redirect("/login");
-  //   }
   const completeProfile = async (formData: FormData) => {
     "use server";
 

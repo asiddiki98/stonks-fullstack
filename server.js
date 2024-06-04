@@ -52,6 +52,22 @@ wss.on("connection", (ws, req) => {
         }
       });
     }
+    if (parsedMessage.type === "CHAT_MESSAGE") {
+      const { userId, username, message, streamerId } = parsedMessage;
+
+      // send to all clients regardless of userId or streamerId
+      wss.clients.forEach((client) => {
+        client.send(
+          JSON.stringify({
+            type: "CHAT_MESSAGE",
+            userId: userId,
+            username: username,
+            message: message,
+            streamerId: streamerId,
+          })
+        );
+      });
+    }
   });
 });
 

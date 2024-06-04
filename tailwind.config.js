@@ -13,6 +13,10 @@ module.exports = {
           background: "hsl(var(--btn-background))",
           "background-hover": "hsl(var(--btn-background-hover))",
         },
+        gridTemplateRows: {
+          // Define custom grid rows layout
+          layout: "auto 1fr auto",
+        },
       },
     },
   },

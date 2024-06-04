@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { sendEmail } from "@/utils/sendEmail";
 
+const webSocketUrl: any = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
+
 export async function GET(request: Request) {
   const supabase = createClient();
   const { searchParams } = new URL(request.url);
@@ -41,21 +43,23 @@ export async function GET(request: Request) {
       console.log("onlineFollowers", onlineFollowers);
 
       if (onlineFollowers.length > 0) {
-        const ws = new WebSocket("ws://localhost:8080");
+        const ws = new WebSocket(webSocketUrl);
         ws.onopen = () => {
           ws.send(
             JSON.stringify({
-              type: "STREAM_START",
+              action: "sendmessage",
+              message: "hello, everyone!",
               userId: userId,
+              type: "STREAM_START",
               username: username,
-              followers: onlineFollowers,
+              followerIds: onlineFollowers,
             })
           );
         };
       }
 
       // send email to the offline followers
-      console.log("offlineFollowers", offlineFollowers);
+      // console.log("offlineFollowers", offlineFollowers);
       // if (offlineFollowers.length > 0) {
       //   for (const follower of offlineFollowers) {
       //     const message = `Hello ${follower.username}, ${username} has started streaming. Check it out!`;

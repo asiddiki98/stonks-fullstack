@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import FollowBtn from "@/components/FollowBtn";
-import useWebSocket from "@/lib/hooks/useWebsocket";
+import ChatBox from "@/components/ChatBox";
 
 type Profile = {
   id: string;
@@ -26,8 +26,6 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const { profileId } = params;
-
-  // const ws = useWebSocket(`ws://localhost:8080?userId=${user?.id}`);
 
   const router = useRouter();
 
@@ -144,30 +142,35 @@ export default function Profile() {
           </button>
         </form>
       )}
-      {isUser && isStreaming && (
-        <div>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-      )}
-      {!isUser && profile?.is_streaming && (
-        <div>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-      )}
+      <div className="flex gap-4 max-h-[315px]">
+        {isUser && isStreaming && (
+          <div>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        )}
+        {!isUser && profile?.is_streaming && (
+          <div>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        )}
+        {((isUser && isStreaming) || (!isUser && profile?.is_streaming)) && (
+          <ChatBox streamerProfile={isUser ? user : profile} />
+        )}
+      </div>{" "}
     </div>
   );
 }

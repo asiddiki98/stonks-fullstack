@@ -13,16 +13,23 @@ export default function Notifications() {
   const supabase = createClient();
 
   // Function to handle incoming WebSocket messages
-  const handleMessage = useCallback((event: MessageEvent) => {
-    const message = JSON.parse(event.data);
-    if (message.type === "STREAM_START") {
-      console.log("Stream started:", message);
-      setMessages((prevMessages) => [...prevMessages, message]);
-    }
-  }, []);
+  const handleMessage = useCallback(
+    (event: MessageEvent) => {
+      const message: any = JSON.parse(event.data);
+
+      if (
+        message.type === "STREAM_START" &&
+        message.followerIds.some((id: string) => id === user?.id)
+      ) {
+        console.log("Stream started:", message);
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
+    },
+    [user?.id]
+  );
 
   const ws = useWebSocket(
-    `ws://localhost:8080?userId=${user?.id}`,
+    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?userId=${user?.id}`,
     handleMessage
   );
   // Fetch user data
