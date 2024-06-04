@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-
 const webSocketUrl: any = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
 
 export async function POST(req: Request) {
@@ -12,11 +11,6 @@ export async function POST(req: Request) {
 
   // Connect to the WebSocket server if not already connected
   const ws = new WebSocket(`${webSocketUrl}?identifier=${userId}`);
-
-  ws.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
-
   ws.onopen = () => {
     // Send the chat message to the WebSocket server
     ws.send(
