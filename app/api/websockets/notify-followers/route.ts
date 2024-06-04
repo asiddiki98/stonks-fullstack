@@ -43,7 +43,7 @@ export async function GET(request: Request) {
       console.log("onlineFollowers", onlineFollowers);
 
       if (onlineFollowers.length > 0) {
-        const ws = new WebSocket(webSocketUrl);
+        const ws = new WebSocket(`${webSocketUrl}?identifier=${userId}`);
         ws.onopen = () => {
           ws.send(
             JSON.stringify({
@@ -55,6 +55,8 @@ export async function GET(request: Request) {
               followerIds: onlineFollowers,
             })
           );
+
+          ws.close();
         };
       }
 
