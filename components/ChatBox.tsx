@@ -28,16 +28,6 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
     fetchUser();
   }, []);
 
-  //   const handleMessage = (event: MessageEvent) => {
-  //     const message = JSON.parse(event.data);
-  //     if (message.type === "CHAT_MESSAGE") {
-  //       if (message.streamerId === streamerProfile.id) {
-  //         console.log("message", message);
-  //         setMessages((prev) => [...prev, message]);
-  //       }
-  //     }
-  //   };
-
   const handleMessage = useCallback((event: MessageEvent) => {
     const message = JSON.parse(event.data);
     if (message.type === "CHAT_MESSAGE") {
