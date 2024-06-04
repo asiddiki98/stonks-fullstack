@@ -38,19 +38,19 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
   //     }
   //   };
 
-  const handleMessage = useCallback(
-    (event: MessageEvent) => {
-      const message = JSON.parse(event.data);
-      if (message.type === "CHAT_MESSAGE") {
-        if (message.streamerId === streamerProfile.id) {
-          console.log("message", message);
-          setMessages((prev) => [...prev, message]);
-        }
+  const handleMessage = useCallback((event: MessageEvent) => {
+    const message = JSON.parse(event.data);
+    if (message.type === "CHAT_MESSAGE") {
+      if (message.streamerId === streamerProfile.id) {
+        console.log("message", message);
+        setMessages((prev) => [...prev, message]);
       }
-    },
-    [streamerProfile.id]
+    }
+  }, []);
+  const ws = useWebSocket(
+    `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?userId=${user?.id}`,
+    handleMessage
   );
-  const ws = useWebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL, handleMessage);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
