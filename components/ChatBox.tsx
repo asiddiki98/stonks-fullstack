@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useWebSocket from "@/lib/hooks/useWebsocket";
 import { createClient } from "@/utils/supabase/client";
 import { Icon } from "@iconify/react";
@@ -28,15 +28,28 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
     fetchUser();
   }, []);
 
-  const handleMessage = (event: MessageEvent) => {
-    const message = JSON.parse(event.data);
-    if (message.type === "CHAT_MESSAGE") {
-      if (message.streamerId === streamerProfile.id) {
-        console.log("message", message);
-        setMessages((prev) => [...prev, message]);
+  //   const handleMessage = (event: MessageEvent) => {
+  //     const message = JSON.parse(event.data);
+  //     if (message.type === "CHAT_MESSAGE") {
+  //       if (message.streamerId === streamerProfile.id) {
+  //         console.log("message", message);
+  //         setMessages((prev) => [...prev, message]);
+  //       }
+  //     }
+  //   };
+
+  const handleMessage = useCallback(
+    (event: MessageEvent) => {
+      const message = JSON.parse(event.data);
+      if (message.type === "CHAT_MESSAGE") {
+        if (message.streamerId === streamerProfile.id) {
+          console.log("message", message);
+          setMessages((prev) => [...prev, message]);
+        }
       }
-    }
-  };
+    },
+    [streamerProfile.id]
+  );
   const ws = useWebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL, handleMessage);
 
   const handleSubmit = async (e: React.FormEvent) => {
