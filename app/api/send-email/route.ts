@@ -3,12 +3,12 @@ import { sendEmail } from "@/utils/sendEmail";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { userId, username, email } = await request.json();
+  const { username, email } = await request.json();
 
   try {
     // Send email to each follower's email address
     for (const emailAddress of email) {
-      const message = `Hello ${username}, ${userId} has started streaming. Check it out!`;
+      const message = ` ${username} has started streaming. Check it out!`;
       await sendEmail(emailAddress, "New Stream Alert", message);
     }
 

@@ -20,7 +20,6 @@ export default function useWebSocket() {
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("Message received:", message);
       handleIncomingMessage(message);
     };
 

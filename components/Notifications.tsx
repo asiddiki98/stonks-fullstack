@@ -14,6 +14,11 @@ export default function Notifications() {
     (state: any) => state.notification.notifications
   );
 
+  const openProfile = (id: any) => {
+    // Function to open profile
+    window.location.href = `/profile/${id}`;
+  };
+
   // Function to handle incoming WebSocket messages
 
   return (
@@ -28,12 +33,22 @@ export default function Notifications() {
       </h1>
 
       {open && (
-        <ul className=" absolute top-12 right-0 min-w-[200px]  border rounded">
+        <ul className=" absolute top-12 right-0 min-w-[200px]  border rounded bg-blue-300">
           {messages.map((msg: any, index: any) => (
-            <li className="py-2 border-b  px-4" key={index}>
+            <li
+              onClick={() => openProfile(msg.userId)}
+              className="py-2 border-b  px-4 cursor-pointer"
+              key={index}
+            >
               <small>{msg.username} started streaming</small>
             </li>
           ))}
+
+          {messages.length === 0 && (
+            <li className="py-2 border-b  px-4">
+              <small>No new notifications</small>
+            </li>
+          )}
         </ul>
       )}
     </div>

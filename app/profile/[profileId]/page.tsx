@@ -130,7 +130,12 @@ export default function Profile() {
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <h1 className="text-2xl font-bold">{profile?.username}</h1>
-      {!isUser && <FollowBtn currentUserId={user?.id} profile={profile} />}
+      {!isUser && (
+        <FollowBtn
+          currentUserId={user?.id === "public" ? null : user?.id}
+          profile={profile}
+        />
+      )}
       {isUser && (
         <form onSubmit={isStreaming ? endStream : startStream}>
           <button

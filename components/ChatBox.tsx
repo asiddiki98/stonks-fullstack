@@ -4,6 +4,8 @@ import { createClient } from "@/utils/supabase/client";
 import { Icon } from "@iconify/react";
 import { useSelector } from "react-redux";
 import { sendWebSocketMessage } from "@/lib/sendChat";
+import { clearMessages } from "@/redux/chatSlice";
+import { useDispatch } from "react-redux";
 
 export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
   const [user, setUser] = useState<any>(null);
@@ -11,7 +13,10 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
   const [input, setInput] = useState("");
   const messages = useSelector((state: any) => state.chat.messages);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(clearMessages());
     const fetchUser = async () => {
       const {
         data: { user },
@@ -36,12 +41,6 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
     }
     if (input.trim()) {
       setInput("");
-      //   const body = {
-      //     userId: user.id,
-      //     username: user.username,
-      //     streamerId: streamerProfile.id,
-      //     message: input,
-      //   };
       sendWebSocketMessage(user.id, user.username, input, streamerProfile.id);
     }
   };
@@ -59,8 +58,6 @@ export default function ChatBox({ streamerProfile }: { streamerProfile: any }) {
               <strong>{msg.username}:</strong> {msg.message}
             </li>
           ))}
-
-          {/* <p>hello</p> */}
         </ul>
       </div>
       <form className="flex  gap-2" onSubmit={handleSubmit}>

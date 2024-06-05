@@ -81,7 +81,7 @@ export default function Index() {
   return (
     <main className="flex-1 w-full flex flex-col gap-20 items-center">
       <section className="w-full px-[20rem] py-4">
-        <ul>
+        <ul className="flex flex-col gap-4">
           {profiles.map((profile: any) => (
             <Channel
               currentUserId={user?.id || null}

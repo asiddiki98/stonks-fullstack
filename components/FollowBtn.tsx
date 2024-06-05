@@ -13,8 +13,9 @@ export default function FollowBtn({
   const [isFollowing, setIsFollowing] = useState(profile.isFollowing);
 
   const supabase = createClient();
-  const follow = async (event: React.FormEvent) => {
+  const follow = async (event: any) => {
     event.preventDefault();
+    event.stopPropagation();
 
     if (!currentUserId) {
       window.location.href = "/login"; // Redirect to login if not authenticated
@@ -33,8 +34,9 @@ export default function FollowBtn({
     }
   };
 
-  const unfollow = async (event: React.FormEvent) => {
+  const unfollow = async (event: any) => {
     event.preventDefault();
+    event.stopPropagation();
 
     if (!currentUserId) {
       window.location.href = "/login"; // Redirect to login if not authenticated
@@ -55,13 +57,14 @@ export default function FollowBtn({
   };
 
   return (
-    <form onSubmit={isFollowing ? unfollow : follow}>
-      <button
-        type="submit"
-        className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-      >
-        {isFollowing ? "Unfollow" : "Follow"}
-      </button>
-    </form>
+    // <form onSubmit={isFollowing ? unfollow : follow}>
+    <button
+      onClick={isFollowing ? unfollow : follow}
+      type="submit"
+      className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+    >
+      {isFollowing ? "Unfollow" : "Follow"}
+    </button>
+    // </form>
   );
 }
