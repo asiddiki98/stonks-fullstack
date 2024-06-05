@@ -1,4 +1,4 @@
-# Project Name
+# stonks fullstack assessment
 
 ## Overview
 
