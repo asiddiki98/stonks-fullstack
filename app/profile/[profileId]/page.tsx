@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import FollowBtn from "@/components/FollowBtn";
 import ChatBox from "@/components/ChatBox";
+import sendNotification from "@/lib/sendNotification";
 
 type Profile = {
   id: string;
@@ -104,9 +105,7 @@ export default function Profile() {
       setIsStreaming(true);
     }
 
-    fetch(
-      `/api/websockets/notify-followers?id=${user.id}&username=${user?.username}`
-    );
+    sendNotification(user.id, user.username);
   };
 
   const endStream = async (event: React.FormEvent) => {
